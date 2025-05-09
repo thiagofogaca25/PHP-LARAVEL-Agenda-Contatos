@@ -81,6 +81,7 @@ O aplicativo estará disponível em `http://localhost:8000`.
   * `contatos/index.blade.php`: Tela para listar e buscar contatos.
 * **routes/web.php**: Define as rotas para o CRUD de contatos.
 
+<<<<<<< HEAD
 
 =======
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
@@ -146,3 +147,5 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 >>>>>>> 83dbe0a (primeiro commit)
 >>>>>>> 2beba9a (primeiro commit)
+=======
+>>>>>>> d9a7691 (primeiro commit)
