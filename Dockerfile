@@ -1,9 +1,17 @@
 FROM php:8.2-apache
 
-# Instala extensões do PHP necessárias para Laravel
+# Instala extensões PHP necessárias para Laravel
 RUN apt-get update && apt-get install -y \
-    git zip unzip libzip-dev libsqlite3-dev \
-    && docker-php-ext-install pdo pdo_sqlite
+    git \
+    zip \
+    unzip \
+    libzip-dev \
+    libsqlite3-dev \
+    && docker-php-ext-install pdo pdo_sqlite \
+    && apt-get clean
+
+# Habilitar o mod_rewrite do Apache (necessário para Laravel)
+RUN a2enmod rewrite
 
 # Instala o Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -17,13 +25,14 @@ COPY . .
 # Instala dependências do Laravel
 RUN composer install --no-dev --optimize-autoloader
 
-# Define permissões
+# Configura permissões adequadas para o Laravel
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Gera chave do Laravel
+# Gera a chave da aplicação Laravel
 RUN php artisan key:generate
 
-# Expõe a porta
+# Exponha a porta 80 para acesso ao Apache
 EXPOSE 80
 
-CMD ["php", "-S", "0.0.0.0:80", "-t", "public"]
+# Configura o Apache para servir a aplicação
+CMD ["apache2-foreground"]
