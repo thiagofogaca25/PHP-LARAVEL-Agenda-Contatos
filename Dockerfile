@@ -1,28 +1,30 @@
 FROM php:8.2-apache
 
-# Instala dependências
+# Instala extensões necessárias
 RUN apt-get update && apt-get install -y \
-    git zip unzip libzip-dev libonig-dev libsqlite3-dev \
-    && docker-php-ext-install pdo pdo_sqlite mbstring zip \
-    && a2enmod rewrite
+    git zip unzip libzip-dev libsqlite3-dev \
+    && docker-php-ext-install pdo pdo_sqlite
 
-# Copia o Composer
+# Instala o Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Define diretório de trabalho
+# Define o diretório do projeto
 WORKDIR /var/www/html
 
-# Copia arquivos
+# Copia os arquivos do projeto
 COPY . .
 
-# Instala dependências
+# Instala dependências do Laravel
 RUN composer install --no-dev --optimize-autoloader
 
-# Permissões para Laravel
-RUN chown -R www-data:www-data storage bootstrap/cache
+# Permissões
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Corrige Apache para servir a pasta "public"
+RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
 # Expõe a porta
 EXPOSE 80
 
-# Inicia o Apache
+# Usa o Apache por padrão
 CMD ["apache2-foreground"]

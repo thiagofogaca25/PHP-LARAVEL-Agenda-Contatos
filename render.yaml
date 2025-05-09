@@ -13,3 +13,7 @@ services:
         value: sqlite
       - key: DB_DATABASE
         value: /data/database.sqlite
+    # Garante persistência do banco SQLite
+    mounts:
+      - name: data
+        path: /data
